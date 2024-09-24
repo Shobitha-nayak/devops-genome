@@ -1,0 +1,67 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout the repository from Git
+                git 'https://github.com/your-repo.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Building the application...'
+                // Add your build steps here (e.g., compiling code)
+                sh './build.sh' // Assuming build.sh contains your build logic
+            }
+        }
+
+        stage('Test') {
+            parallel {
+                stage('Unit Tests') {
+                    steps {
+                        echo 'Running Unit Tests...'
+                        sh './run_unit_tests.sh' // Assuming run_unit_tests.sh contains unit test commands
+                    }
+                }
+                stage('Integration Tests') {
+                    steps {
+                        echo 'Running Integration Tests...'
+                        sh './run_integration_tests.sh' // Assuming run_integration_tests.sh contains integration test commands
+                    }
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    echo 'Deploying application...'
+                    // Try deploying the application
+                    def deployStatus = sh(script: './deploy.sh', returnStatus: true)
+
+                    // If deployment fails, trigger a rollback
+                    if (deployStatus != 0) {
+                        echo 'Deployment failed! Initiating rollback...'
+                        sh './rollback.sh' // Rollback script
+                        error("Deployment failed and rollback executed.")
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Cleaning up workspace...'
+            cleanWs() // Clean up workspace after build
+        }
+        success {
+            echo 'Pipeline executed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+    }
+}
