@@ -1,0 +1,11 @@
+
+groups:
+  - name: jenkins-alerts
+    rules:
+      - alert: HighBuildTime
+        expr: jenkins_build_duration_seconds > 300
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Build time is too high"
