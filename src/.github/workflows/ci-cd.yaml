@@ -1,4 +1,51 @@
-# # .github/workflows/ci-cd.yml
+# # # .github/workflows/ci-cd.yml
+# # name: CI/CD Pipeline
+
+# # on:
+# #   push:
+# #     branches:
+# #       - main
+# #   pull_request:
+# #     branches:
+# #       - main
+
+# # jobs:
+# #   build:
+# #     runs-on: ubuntu-latest
+
+# #     steps:
+# #       - name: Checkout code
+# #         uses: actions/checkout@v2
+
+# #       - name: Set up Node.js
+# #         uses: actions/setup-node@v2
+# #         with:
+# #           node-version: '14'
+
+# #       - name: Install dependencies
+# #         run: npm install
+
+# #       - name: Run tests
+# #         run: npm test
+
+# #   deploy:
+# #     runs-on: ubuntu-latest
+# #     needs: build
+# #     if: github.ref == 'refs/heads/main'
+
+# #     steps:
+# #       - name: Checkout code
+# #         uses: actions/checkout@v2
+
+# #       - name: Deploy to Server
+# #         run: |
+# #           echo "Deploying to server..."
+# #           # Add your deployment commands here
+# #           # Example: ssh user@server 'cd /path/to/app && git pull && npm install && npm start'
+
+
+
+
 # name: CI/CD Pipeline
 
 # on:
@@ -12,36 +59,57 @@
 # jobs:
 #   build:
 #     runs-on: ubuntu-latest
-
+    
 #     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v2
+#     - name: Checkout code
+#       uses: actions/checkout@v2
 
-#       - name: Set up Node.js
-#         uses: actions/setup-node@v2
-#         with:
-#           node-version: '14'
+#     - name: Set up Node.js
+#       uses: actions/setup-node@v2
+#       with:
+#         node-version: '16'
 
-#       - name: Install dependencies
-#         run: npm install
+#     - name: Install dependencies
+#       run: npm install
 
-#       - name: Run tests
-#         run: npm test
+#     - name: Run tests
+#       run: npm test
 
 #   deploy:
 #     runs-on: ubuntu-latest
 #     needs: build
 #     if: github.ref == 'refs/heads/main'
-
+    
 #     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v2
+#     - name: Checkout code
+#       uses: actions/checkout@v2
 
-#       - name: Deploy to Server
-#         run: |
-#           echo "Deploying to server..."
-#           # Add your deployment commands here
-#           # Example: ssh user@server 'cd /path/to/app && git pull && npm install && npm start'
+#     - name: Deploy to production
+#       run: |
+#         # Add deployment commands here, e.g., using SSH, AWS CLI, etc.
+#         echo "Deploying to production..."
+
+#   optimize:
+#     runs-on: ubuntu-latest
+#     needs: build
+#     if: success()
+    
+#     steps:
+#     - name: Cache node modules
+#       uses: actions/cache@v2
+#       with:
+#         path: ~/.npm
+#         key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+
+#     - name: Run performance check
+#       run: |
+#         # Add commands to analyze build performance
+#         echo "Performance checks complete."
+
+
+
+
+
 
 
 
@@ -86,22 +154,5 @@ jobs:
 
     - name: Deploy to production
       run: |
-        # Add deployment commands here, e.g., using SSH, AWS CLI, etc.
+        # Add your deployment commands here, e.g., using SSH, AWS CLI, etc.
         echo "Deploying to production..."
-
-  optimize:
-    runs-on: ubuntu-latest
-    needs: build
-    if: success()
-    
-    steps:
-    - name: Cache node modules
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
-
-    - name: Run performance check
-      run: |
-        # Add commands to analyze build performance
-        echo "Performance checks complete."
