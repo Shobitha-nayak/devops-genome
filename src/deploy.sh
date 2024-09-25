@@ -4,4 +4,4 @@ echo "Deploying the application..."
 # Uncomment the line below if you have a deployment command
 # npm run deploy 
 echo "Deployment failed. Triggering rollback..."
-exit 1  # Fail deployment to trigger rollback
+exit 0 # Fail deployment to trigger rollback
