@@ -6,4 +6,13 @@ global:
 scrape_configs:
   - job_name: 'ci-cd-pipeline'
     static_configs:
-      - targets: ['localhost:8080']  # Replace with your application's address
+      - targets: ['localhost:9090']
+
+  - job_name: 'jenkins'
+    metrics_path: '/prometheus'
+    static_configs:
+      - targets: ['localhost:8090']
+  # Replace with your application's address
+
+rule_files:
+  - /etc/prometheus/alerts.yaml

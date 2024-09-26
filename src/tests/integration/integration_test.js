@@ -1,7 +1,7 @@
 // src/tests/integration/integration_test.js
 
 const request = require('supertest');
-const app = require('../../main/app');
+const app = require('../../app');
 
 describe('Integration Test for API', () => {
     it('should return 200 and Hello World! for GET /', async () => {
